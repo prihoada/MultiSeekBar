@@ -14,7 +14,7 @@ repositories {
 and
 ```gradle
 dependencies {
-    compile 'com.github.jitpack:android-example:1.0.2'
+    compile 'com.github.prihoada:MultiSeekBar:0.1'
 }
 ```
 
