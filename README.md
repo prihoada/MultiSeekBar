@@ -1,9 +1,9 @@
 # MultiSeekBar
 2D SeekBar with multiple selectable values.
 
-Notice: This project is intended as a study material for creating custom view with touch support and not as a fully functional library.
+Notice: This project is intended as a study material for creating custom views with touch support.
 
-If you would still like to use it, add the following to your build.gradle file.
+To use it in an android project, add the following to your build.gradle file.
 
 ```gradle
 repositories {
@@ -11,6 +11,7 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 ```
+and
 ```gradle
 dependencies {
     compile 'com.github.jitpack:android-example:1.0.2'
