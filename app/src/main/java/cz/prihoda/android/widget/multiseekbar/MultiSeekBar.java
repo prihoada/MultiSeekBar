@@ -20,6 +20,7 @@ import java.util.Comparator;
 
 import cz.prihoda.android.widget.multiseekbar.model.Axis;
 import cz.prihoda.android.widget.multiseekbar.model.Grid;
+import cz.prihoda.android.widget.multiseekbar.model.InstanceState;
 import cz.prihoda.android.widget.multiseekbar.model.Thumb;
 import cz.prihoda.android.widget.multiseekbar.model.ThumbPair;
 import cz.prihoda.android.widget.multiseekbar.utils.DimensionUtils;
@@ -143,7 +144,12 @@ public class MultiSeekBar extends View {
 
         Bundle bundle = new Bundle();
         bundle.putParcelable("instanceState", super.onSaveInstanceState());
-        bundle.putSerializable("thumbs", new InstanceState(this.getThumbs()));
+
+        ArrayList<Point> values = new ArrayList<>();
+        for (ThumbPair pair : thumbs) {
+            values.add(pair.getValue());
+        }
+        bundle.putSerializable("thumbs", new InstanceState(values));
         return bundle;
     }
 
@@ -159,24 +165,16 @@ public class MultiSeekBar extends View {
 
             InstanceState instanceState = (InstanceState) bundle.getSerializable("thumbs");
             if(instanceState != null){
-                this.thumbs = instanceState.thumbs;
-                for (ThumbPair thumbPair : thumbs) {
-                    thumbPair.getxAxisThumb().setAxis(xAxis);
-                    thumbPair.getyAxisThumb().setAxis(yAxis);
+                this.thumbs.clear();
+                for (Point value : instanceState.getValues()) {
+                    addThumbPair(value);
                 }
             }
-
             state = bundle.getParcelable("instanceState");
         }
         super.onRestoreInstanceState(state);
     }
 
-    private class InstanceState implements Serializable {
-        public ArrayList<ThumbPair> thumbs;
-        public InstanceState(ArrayList<ThumbPair> thumbs) {
-            this.thumbs = thumbs;
-        }
-    }
 
     /**
      * Adds thumbs to the given position.
