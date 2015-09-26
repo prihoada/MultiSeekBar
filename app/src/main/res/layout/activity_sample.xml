@@ -1,0 +1,22 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity">
+
+
+    <cz.prihoda.android.widget.multiseekbar.MultiSeekBar
+        android:id="@+id/seek_bar"
+        app:capType="corner"
+        app:textMargin="5dp"
+        app:drawGridLineTextY="true"
+        app:drawGridLineTextX="true"
+        app:yGridSpacing="25"
+        app:xGridSpacing="25"
+        android:layout_width="match_parent"
+        android:layout_height="250dp" />
+
+
+
+</FrameLayout>

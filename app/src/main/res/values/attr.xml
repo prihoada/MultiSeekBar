@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MultiSeekBar">
+        <attr name="minValueX" format="integer"/>
+        <attr name="maxValueX" format="integer"/>
+        <attr name="minValueY" format="integer"/>
+        <attr name="maxValueY" format="integer"/>
+
+        <attr name="thumbXDrawable" format="reference"/>
+        <attr name="thumbYDrawable" format="reference"/>
+
+        <attr name="xGridSpacing" format="integer"/>
+        <attr name="yGridSpacing" format="integer"/>
+
+        <attr name="capType" format="enum">
+            <enum name="horizontal" value="0"/>
+            <enum name="corner" value="1"/>
+        </attr>
+
+        <attr name="drawLimitTextX" format="boolean"/>
+        <attr name="drawLimitTextY" format="boolean"/>
+        <attr name="drawGridLineTextX" format="boolean"/>
+        <attr name="drawGridLineTextY" format="boolean"/>
+        <attr name="textMargin" format="dimension"/>
+
+        <attr name="drawLineHelpersX" format="boolean"/>
+        <attr name="drawLineHelpersY" format="boolean"/>
+
+        <attr name="saveInstanceState" format="boolean"/>
+
+    </declare-styleable>
+
+
+</resources>
