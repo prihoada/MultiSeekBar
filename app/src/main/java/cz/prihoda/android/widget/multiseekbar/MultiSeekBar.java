@@ -54,9 +54,11 @@ public class MultiSeekBar extends View {
      */
     public enum CapType{
         HORIZONTAL,
-        CORNER
+        CORNER,
+        NONE
     }
-    private CapType capType;
+    private CapType capTypeStart;
+    private CapType capTypeEnd;
 
     public MultiSeekBar(Context context) {
         super(context);
@@ -101,7 +103,9 @@ public class MultiSeekBar extends View {
                 xAxis.setGridSpacing(typedArray.getInteger(R.styleable.MultiSeekBar_xGridSpacing, 20));
                 yAxis.setGridSpacing(typedArray.getInteger(R.styleable.MultiSeekBar_yGridSpacing, 20));
 
-                capType = CapType.values()[typedArray.getInt(R.styleable.MultiSeekBar_capType, 0)];
+                capTypeStart = CapType.values()[typedArray.getInt(R.styleable.MultiSeekBar_capTypeStart, 0)];
+                capTypeEnd = CapType.values()[typedArray.getInt(R.styleable.MultiSeekBar_capTypeEnd, 0)];
+
 
 
                 textMargin = typedArray.getDimension(R.styleable.MultiSeekBar_textMargin, DimensionUtils.dpToPixels(context, 5));
@@ -352,7 +356,7 @@ public class MultiSeekBar extends View {
 
         //draw starting line
         if(!thumbs.isEmpty()){
-            switch (capType){
+            switch (capTypeStart){
                 case CORNER:
                     canvas.drawLine(grid.getBounds().left, grid.getBounds().bottom, thumbs.get(0).getxAxisThumb().getPixelPosition(), thumbs.get(0).getyAxisThumb().getPixelPosition(), grid.getMainLinePaint());
                     break;
@@ -373,7 +377,7 @@ public class MultiSeekBar extends View {
 
         //draw ending line
         if(!thumbs.isEmpty()) {
-            switch (capType) {
+            switch (capTypeEnd) {
                 case HORIZONTAL:
                     canvas.drawLine(thumbs.get(thumbs.size() - 1).getxAxisThumb().getPixelPosition(), thumbs.get(thumbs.size() - 1).getyAxisThumb().getPixelPosition(), grid.getBounds().right, thumbs.get(thumbs.size() - 1).getyAxisThumb().getPixelPosition(), grid.getMainLinePaint());
                     break;
@@ -398,13 +402,15 @@ public class MultiSeekBar extends View {
         //x axis grid lines
         if(xAxis.getGridSpacing() > 0){
             int numLines = (int) Math.ceil((xAxis.getValueRange() / (float) xAxis.getGridSpacing()) - 1);
+
+
             for (int i = 1; i <= numLines; i++) {
-                canvas.drawLine(xAxis.valueToPixels(i*xAxis.getGridSpacing()), grid.getBounds().bottom, xAxis.valueToPixels(i*xAxis.getGridSpacing()), grid.getBounds().top, xAxis.getGridPaint());
+                canvas.drawLine(xAxis.valueToPixels(i*xAxis.getGridSpacing() + xAxis.getMinValue()), grid.getBounds().bottom, xAxis.valueToPixels(i*xAxis.getGridSpacing() + xAxis.getMinValue()), grid.getBounds().top, xAxis.getGridPaint());
 
                 if(xAxis.isDrawGridLineText()){
-                    String text = String.valueOf(i*xAxis.getGridSpacing());
+                    String text = String.valueOf(i*xAxis.getGridSpacing() + xAxis.getMinValue());
                     xAxis.getTextPaint().getTextBounds(text, 0, text.length(), textBounds);
-                    canvas.drawText(text, xAxis.valueToPixels(i*xAxis.getGridSpacing()) - textBounds.exactCenterX(), xAxis.getBounds().top - textBounds.top + textMargin, xAxis.getTextPaint());
+                    canvas.drawText(text, xAxis.valueToPixels(i*xAxis.getGridSpacing() + xAxis.getMinValue()) - textBounds.exactCenterX(), xAxis.getBounds().top - textBounds.top + textMargin, xAxis.getTextPaint());
                 }
             }
         }
@@ -412,12 +418,12 @@ public class MultiSeekBar extends View {
         if(yAxis.getGridSpacing() > 0){
             int numLines = (int) Math.ceil((yAxis.getValueRange() / (float) yAxis.getGridSpacing()) - 1);
             for (int i = 1; i <= numLines; i++) {
-                canvas.drawLine(grid.getBounds().left, yAxis.valueToPixels(i*yAxis.getGridSpacing()), grid.getBounds().right, yAxis.valueToPixels(i*yAxis.getGridSpacing()), yAxis.getGridPaint());
+                canvas.drawLine(grid.getBounds().left, yAxis.valueToPixels(i*yAxis.getGridSpacing() + yAxis.getMinValue()), grid.getBounds().right, yAxis.valueToPixels(i*yAxis.getGridSpacing() + yAxis.getMinValue()), yAxis.getGridPaint());
 
                 if(yAxis.isDrawGridLineText()){
-                    String text = String.valueOf(i*yAxis.getGridSpacing());
+                    String text = String.valueOf(i*yAxis.getGridSpacing() + yAxis.getMinValue());
                     yAxis.getTextPaint().getTextBounds(text, 0, text.length(), textBounds);
-                    canvas.drawText(text, yAxis.getBounds().right - textBounds.right - textMargin, yAxis.valueToPixels(i*yAxis.getGridSpacing()) - textBounds.exactCenterY(), xAxis.getTextPaint());
+                    canvas.drawText(text, yAxis.getBounds().right - textBounds.right - textMargin, yAxis.valueToPixels(i*yAxis.getGridSpacing() + yAxis.getMinValue()) - textBounds.exactCenterY(), xAxis.getTextPaint());
                 }
             }
 
@@ -428,7 +434,7 @@ public class MultiSeekBar extends View {
     }
 
     /**
-     * Draws all the labels.
+     * Draws the corner text labels.
      * @param canvas view canvas.
      */
     private void drawText(Canvas canvas) {
@@ -611,6 +617,55 @@ public class MultiSeekBar extends View {
         void onValueChanged(Point value2D, int thumbIndex);
         void onXAxisSeek(int xValue, Point value2D, int thumbIndex);
         void onYAxisSeek(int yValue, Point value2D, int thumbIndex);
+    }
+
+
+    /**
+     * Returns true if the view is saving thumb state on acitivity recreation.
+     * @return true if saving state.
+     */
+    public boolean isSaveInstanceState() {
+        return saveInstanceState;
+    }
+
+    /**
+     * Configures whether the view is saving the thumb state on activity recreation.
+     * @param saveInstanceState true if the view should be saving the state.
+     */
+    public void setSaveInstanceState(boolean saveInstanceState) {
+        this.saveInstanceState = saveInstanceState;
+    }
+
+    /**
+     * Returns the starting cap type.
+     * @return cap type on the bottom left side.
+     */
+    public CapType getCapTypeStart() {
+        return capTypeStart;
+    }
+
+    /**
+     * Returns sets how the main line is drawn on the bottom left corner.
+     * @param capTypeStart type of the cap.
+     */
+    public void setCapTypeStart(CapType capTypeStart) {
+        this.capTypeStart = capTypeStart;
+    }
+
+    /**
+     * Returns the ending cap type.
+     * @return cap type on the top right side.
+     */
+    public CapType getCapTypeEnd() {
+        return capTypeEnd;
+    }
+
+    /**
+     * Returns sets how the main line is drawn on the top right corner.
+     * @param capTypeEnd type of the cap.
+     */
+    public void setCapTypeEnd(CapType capTypeEnd) {
+        this.capTypeEnd = capTypeEnd;
     }
 
     /**

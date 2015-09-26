@@ -19,8 +19,8 @@ public class SampleActivity extends AppCompatActivity {
 
 
         MultiSeekBar seekBar = (MultiSeekBar) findViewById(R.id.seek_bar);
-        seekBar.addThumbPair(new Point(20,20));
-        seekBar.addThumbPair(new Point(50,50));
+        seekBar.addThumbPair(new Point(50,20));
+        seekBar.addThumbPair(new Point(70,50));
         seekBar.setOnValueChangedListener(new MultiSeekBar.OnValueChangedListener() {
             @Override
             public void onValueChanged(Point value2D, int thumbIndex) {

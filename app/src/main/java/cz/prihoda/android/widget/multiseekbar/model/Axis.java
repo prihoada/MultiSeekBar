@@ -128,7 +128,7 @@ public class Axis {
         float pixelRatio = pixels/pixelRange;
 
         int value = Math.round(valueRange * pixelRatio);
-        value += minValue;
+        if(!inverted) value += minValue;
 
         if(inverted) value = maxValue - value;
         return value;
@@ -150,7 +150,7 @@ public class Axis {
     public float valueToPixels(int value){
         if(inverted) value = maxValue - value;
 
-        value -= minValue;
+        if(!inverted) value -= minValue;
         float valueRatio = value/(float)valueRange;
 
         float pixels = pixelRange * valueRatio;

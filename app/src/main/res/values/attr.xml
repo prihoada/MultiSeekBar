@@ -13,9 +13,15 @@
         <attr name="xGridSpacing" format="integer"/>
         <attr name="yGridSpacing" format="integer"/>
 
-        <attr name="capType" format="enum">
+        <attr name="capTypeStart" format="enum">
             <enum name="horizontal" value="0"/>
             <enum name="corner" value="1"/>
+            <enum name="none" value="2"/>
+        </attr>
+        <attr name="capTypeEnd" format="enum">
+            <enum name="horizontal" value="0"/>
+            <enum name="corner" value="1"/>
+            <enum name="none" value="2"/>
         </attr>
 
         <attr name="drawLimitTextX" format="boolean"/>

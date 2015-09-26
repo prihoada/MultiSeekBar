@@ -8,12 +8,16 @@
 
     <cz.prihoda.android.widget.multiseekbar.MultiSeekBar
         android:id="@+id/seek_bar"
-        app:capType="corner"
+        app:capTypeStart="corner"
+        app:capTypeEnd="horizontal"
         app:textMargin="5dp"
         app:drawGridLineTextY="true"
         app:drawGridLineTextX="true"
-        app:yGridSpacing="25"
-        app:xGridSpacing="25"
+        app:minValueX="30"
+        app:minValueY="20"
+        app:yGridSpacing="20"
+        app:xGridSpacing="20"
+        app:maxValueY="100"
         android:layout_width="match_parent"
         android:layout_height="250dp" />
 
